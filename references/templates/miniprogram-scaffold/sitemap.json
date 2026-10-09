@@ -1,0 +1,9 @@
+{
+  "desc": "关于本文件的更多信息，请参考官方文档 sitemap 配置说明",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+<view class="page">
+  <view class="cups" wx:if="{{ready}}">
+    <text class="num">{{cups}}</text>
+    <text class="unit">杯</text>
+  </view>
+  <view class="placeholder" wx:else>加载中…</view>
+</view>

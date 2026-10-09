@@ -1,0 +1,50 @@
+# 本地开发 compose 模板：app（Node）+ mysql
+# 云端用微信云托管（服务 + 云托管 MySQL），不使用本文件
+#
+# ★ 启动必须带项目名：docker compose -p <你的项目名> up -d
+#   compose 默认拿【目录名】当项目名——如果 compose 文件放在 server/ 目录，
+#   项目名就是 "server"，同机别的项目若也有 server/ 目录会撞名，
+#   up 时可能接管/重建别人的容器（真实踩坑）。
+#   或者在下方顶层固定 name:（需 docker compose v2）。
+name: myapp-local
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"        # 宿主:容器。宿主端口被占只改左边（如 3001:3000）
+    environment:
+      # ★ 必须显式覆盖（environment 优先级高于 env_file），原因：
+      #   env_file 会把"宿主视角"的 .env 原样塞进容器：
+      #   ① .env 里 MYSQL_HOST=127.0.0.1:33061 → 容器里是"连自己" → ECONNREFUSED
+      #      （还会被数据层瞬时错误重试吞 33 秒，极难排查）
+      #   ② .env 里 PORT=3001 → 容器监听 3001，而映射是 3000:3000
+      #      → 容器正常启动、docker ps 正常，但外部就是访问不到
+      MYSQL_HOST: mysql:3306
+      PORT: "3000"
+    env_file: .env
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    command: --lower-case-table-names=1
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-devpassword}
+      # 与 .env 同步：换库名只需改 .env 一处（${} 插值会读同目录 .env）
+      # ⚠ 已存在的数据卷不会补建新库（MySQL 只在数据目录为空的首启时按
+      #   MYSQL_DATABASE 建库）——换库名要手动 CREATE DATABASE，或
+      #   docker compose down -v 重建卷（会清数据）
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-myapp}
+    ports:
+      - "33061:3306"   # 宿主 3306 常被本机安装的 MySQL 占用 → 映射 33061；
+                       # ★ 33061 也可能被别的容器占——冲突就顺延 33062/33063，
+                       #   端口只在 .env / 这里一处改，config 读 .env。
+                       #   app 容器走容器网络（mysql:3306），此映射仅供宿主调试
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  mysql-data:

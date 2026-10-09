@@ -1,0 +1,26 @@
+.page {
+  padding: 48rpx;
+}
+
+.cups {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-top: 120rpx;
+}
+
+.num {
+  font-size: 160rpx;
+  font-weight: 700;
+}
+
+.unit {
+  font-size: 48rpx;
+  margin-left: 16rpx;
+}
+
+.placeholder {
+  text-align: center;
+  color: #888;
+  margin-top: 120rpx;
+}

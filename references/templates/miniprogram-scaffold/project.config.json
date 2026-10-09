@@ -1,0 +1,21 @@
+{
+  "appid": "<你的AppID，或测试号/游客 AppID>",
+  "compileType": "miniprogram",
+  "projectname": "my-first-miniapp",
+  "libVersion": "2.33.0",
+  "setting": {
+    "useCompilerPlugins": ["typescript"],
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "coverView": true,
+    "packNpmManually": false,
+    "packNpmRelationList": []
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

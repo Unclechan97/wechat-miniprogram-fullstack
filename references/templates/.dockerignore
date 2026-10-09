@@ -1,0 +1,9 @@
+# CLI 上传构建上下文时的排除清单——.env 里有密钥，绝不能上传
+node_modules
+data
+.env
+.env.*
+*.zip
+*.log
+docker-compose.yml
+Dockerfile.bak

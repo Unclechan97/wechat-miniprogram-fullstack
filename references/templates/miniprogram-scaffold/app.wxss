@@ -1,0 +1,6 @@
+/* 全局样式：放通用类（字号、颜色变量等） */
+page {
+  background: #f6f6f6;
+  font-size: 32rpx;
+  color: #222;
+}
